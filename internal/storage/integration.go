@@ -228,14 +228,15 @@ func (s *Storage) Integration(userID int64) (*model.Integration, error) {
 			linktaco_org_slug,
 			linktaco_tags,
 			linktaco_visibility,
-			archiveorg_enabled
+        			archiveorg_enabled,
+        			readeck_auto_push
 		FROM
 			integrations
 		WHERE
 			user_id=$1
 	`
 	var integration model.Integration
-	err := s.db.QueryRow(query, userID).Scan(
+    err := s.db.QueryRow(query, userID).Scan(
 		&integration.UserID,
 		&integration.PinboardEnabled,
 		&integration.PinboardToken,
@@ -354,9 +355,10 @@ func (s *Storage) Integration(userID int64) (*model.Integration, error) {
 		&integration.LinktacoAPIToken,
 		&integration.LinktacoOrgSlug,
 		&integration.LinktacoTags,
-		&integration.LinktacoVisibility,
-		&integration.ArchiveorgEnabled,
-	)
+            &integration.LinktacoVisibility,
+            &integration.ArchiveorgEnabled,
+            &integration.ReadeckAutoPush,
+            )
 	switch {
 	case err == sql.ErrNoRows:
 		return &integration, nil
@@ -491,9 +493,10 @@ func (s *Storage) UpdateIntegration(integration *model.Integration) error {
 			linktaco_org_slug=$116,
 			linktaco_tags=$117,
 			linktaco_visibility=$118,
-			archiveorg_enabled=$119
-		WHERE
-			user_id=$120
+        			archiveorg_enabled=$119,
+        			readeck_auto_push=$120
+        		WHERE
+        			user_id=$121
 	`
 	_, err := s.db.Exec(
 		query,
@@ -615,9 +618,10 @@ func (s *Storage) UpdateIntegration(integration *model.Integration) error {
 		integration.LinktacoOrgSlug,
 		integration.LinktacoTags,
 		integration.LinktacoVisibility,
-		integration.ArchiveorgEnabled,
-		integration.UserID,
-	)
+            integration.ArchiveorgEnabled,
+            integration.ReadeckAutoPush,
+            integration.UserID,
+            )
 
 	if err != nil {
 		return fmt.Errorf(`store: unable to update integration record: %v`, err)

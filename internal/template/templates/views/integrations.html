@@ -510,6 +510,10 @@
                 <input type="checkbox" name="readeck_only_url" value="1" {{ if .form.ReadeckOnlyURL }}checked{{ end }}> {{ t "form.integration.readeck_only_url" }}
             </label>
 
+            <label>
+                <input type="checkbox" name="readeck_auto_push" value="1" {{ if .form.ReadeckAutoPush }}checked{{ end }}> Automatically send new entries
+            </label>
+
             <label for="form-readeck-url">{{ t "form.integration.readeck_endpoint" }}</label>
             <input type="url" name="readeck_url" id="form-readeck-url" value="{{ .form.ReadeckURL }}" placeholder="https://readeck.com" spellcheck="false">
 
